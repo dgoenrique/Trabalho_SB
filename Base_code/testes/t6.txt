@@ -1,0 +1,19 @@
+//Test for include 
+
+#include "test.c
+#include test.c"
+
+#include stdio.h>
+#include <stdio.h
+
+#include 
+#include test.h
+
+#include <test.h"
+#include "test.h>
+
+int main(void){
+  printf("foo\n");
+}
+
+

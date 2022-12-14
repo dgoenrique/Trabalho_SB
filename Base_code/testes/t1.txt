@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void mostrarSeiLaoq(){
+  return 2
+}
+
+int main(){
+ int senha=123,numero,i;   
+  int qtd,linha;
+   float altura, peso, imc;
+    printf("Etre com a sua altura e seu peso:\n");
+    scanf("%f %f", &altura, &peso);
+    imc = (peso/altura)/altura;
+    printf("Seu IMC vale %f\n", imc);
+  int arr[21 = 23;
+    for(int i=0; i<3; i++){
+    printf("Digite sua senha:\n");
+    scanf("%d", &senha)
+    if(senha==293) {
+        printf("Acesso Liberado\n");
+        exit(0)
+     }
+    if(senha!=293){
+        printf("Senha incorreta, tente novamente\n");
+        }
+    }
+
+	scanf("%d",&linha);
+	scanf("%d",&qtd);
+	for(int a=1;a<=qtd;a++){
+		if(a%linha==0){
+			printf("%d\n",a);
+		}else{
+			printf("%d ",a);
+		}
+	}
+}
+
+
