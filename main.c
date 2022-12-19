@@ -67,11 +67,12 @@ int main()
                 printf("%s = %rdx\n", "parametro");
             }
             printf("\n");
+            printf("Definição da função\n");
         }
-
 
         else if (!strcmp("def", s1)) /// AQUI SÃO DEFINIDAS AS VARIÁVEIS LOCAIS
         {
+            printf("Definição das variáveis\n");
             while (1)
             {
                 scanf("%[^\n]%*c", str);
@@ -97,6 +98,7 @@ int main()
         }
         else if (!strcmp("return", s1)) // AQUI É DEFINIDA O RETORNO DA FUNÇÃO
         {
+            printf("Definição do retorno\n");
             sscanf(str, "%s %s", s1, s2);
             sscanf(s2, "%2s %d", s3, &ax);
 
@@ -109,7 +111,7 @@ int main()
         }
         else if (!strcmp("end", s1)) // AQUI SE LOCALIZA O FIM DA FUNÇÃO
         {
-
+            printf("Definição do fim\n");
             printf("leave\nret\n\n");
             return 0;
         }
@@ -131,7 +133,6 @@ int main()
                         printf("movl %s, %s\n", s5, regispilha[0]); // PARAMETRO OU VARIÁVEL
                 }
 
-
                 if (strlen(s6) > 2)
                 {
                     sscanf(s6, "%2s %d", s2, &ax);
@@ -142,7 +143,6 @@ int main()
                     else
                         printf("movl %s, %s\n", s6, regispilha[1]);
                 }
-                
 
                 if (strlen(s7) > 2)
                 {
@@ -170,13 +170,11 @@ int main()
                     else
                         printf("movl $%d, %s\n", ax, regisamare[1]);
 
-
                     sscanf(s5, "%2s %d", s7, &ax);
                     if (!strcmp("vi", s7) || !strcmp("pi", s7))
                         printf("movl %s, %s\n", s5, regisamare[2]);
                     else
                         printf("movl $%d, %s\n", ax, regisamare[2]);
-
 
                     if (s4[0] == '*')
                         printf("imull %s, %s\n", regisamare[1], regisamare[2]);
@@ -200,6 +198,45 @@ int main()
             }
             printf("\n");
         }
+        else if (!strcmp("if", s1))
+        {
+            printf("Definição de if\n");
+            sscanf(str, "%s %s %s %s", s1, s2, s3, s4);
+            /*if (strlen(s4) > 2)
+            {
+            }
+            else
+            {*/
+            printf("cmpl $0, %s\n", s2);
+            printf("jne end_if\n");
+            // printf("if %s != 0", s2);
+            //}
+        }
+        else if (!strcmp("endif", s1))
+            printf("end_if:\n");
         // ACESSAR ARRAYS E CRIAR CONDICIONAIS
+
+        else if (!strcmp("set", s1))
+        {
+            printf("Definição do set das variáveis de um vetor\n");
+            sscanf(str, "%s %s %s %s %s %s", s1, s2, s3, s4, s5, s6);
+            sscanf(s4, "%2s %d", s7, &ax);
+            printf(" %s[%d] = ", s2, ax);
+            sscanf(s6, "%2s %d", s7, &ax);
+            if (!strcmp("ci", s7))
+                printf("%d\n", ax);
+            else
+                printf("%s\n", s6);
+        }
+
+        else if (!strcmp("get", s1))
+        {
+            printf("Definição do get de um vetor\n");
+            sscanf(str, "%s %s %s %s %s %s", s1, s2, s3, s4, s5, s6);
+            sscanf(s4, "%2s %d", s7, &ax);
+            printf("%s = %s[%d]\n", s6, s2, ax);
+            sscanf(s6, "%2s %d", s7, &ax);
+        }
+        printf("\n");
     }
 }
