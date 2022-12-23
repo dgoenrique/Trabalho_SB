@@ -16,8 +16,8 @@ int main() //Código em C
         {"\%r11d"},
         {"\%rbp"},
         {"\%rsp"}};
-    char regispilha[3][5] = {{"\%edi"}, {"\%esi"}, {"\%edx"}};
-    char regispilha2[3][5] = {{"\%rdi"}, {"\%rsi"}, {"\%rdx"}};
+    char regispilha[3][5] = {{"\%edi"}, {"\%esi"}, {"\%edx"}}; //4 Bytes
+    char regispilha2[3][5] = {{"\%rdi"}, {"\%rsi"}, {"\%rdx"}}; //8 Bytes
     // FOI UTILIZADO VETORES DE CHAR PARA ARMAZENAR OS REGISTRADORES PARA QUE FICASSE MAIS FACIL A SUA MANIPULAÇÃO
 
     while (1)
