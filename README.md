@@ -16,7 +16,7 @@
 
 ## Descrição do Projeto
 
-O trabalho se baseia na implementação de um tradutor de uma linguagem simples (chamada de BPL – Bruno’s Programming Language) para Assembly.
+  O trabalho se baseia na implementação de um tradutor de uma linguagem simples (chamada de BPL – Bruno’s Programming Language) para Assembly.
 
 <p> execute gcc -o main main.c <p>
   <p> ./main <test.txt > out.txt <p>
