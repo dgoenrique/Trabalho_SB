@@ -1,5 +1,6 @@
 # Trabalho de Software Básico
 <p align="center"><img src="ufg.png" alt="Logo UFG" height="170" width="240"></p>
+
 ## Este projeto foi desenvolvido por:
 <ul>
   <li><i>Diego Enrique da Silva Lima</i></li>
