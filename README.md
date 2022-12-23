@@ -30,7 +30,14 @@ criar um arquivo com a linguagem e utilizar o redirecionamento para testar:
 ```
 - O tradutor deve imprimir as posições dos elementos na pilha em forma de comentários,
 antes da alocação da pilha. Isso inclui variáveis locais ou qualquer posição de salvamento de
-registradores (como se fosse o desenho da pilha).
+registradores (como se fosse o desenho da pilha). Por exemplo
+```
+# vi1: -4
+# va2: -16
+# vi3: -32
+# rbx: -36
+subq $48, %rsp
+```
 
 
 
