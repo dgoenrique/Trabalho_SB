@@ -5,4 +5,3 @@
   <li>Luca Mascarenhas Plaster</li>
   <li>Diego Enrique da Silva Lima</li>
 </ul>
-<p>Agradecemos a todos pelo esforço e dedicação durante o desenvolvimento deste trabalho.</p>
