@@ -10,5 +10,17 @@ vi2 = call f1 ci5 pa1
 vi2 = vi1
 vi1 = pi1 + vi2
 vi2 = vi1 * ci-5
+set va2 index ci5 with ci2
+set pa2 index ci0 with vi1
+get va2 index ci8 to vi1
+if vi1
+vi1 = ci0
+endif
+if vi1
+get va2 index ci8 to vi1
+endif
+if vi1
+return vi1
+endif
 return vi2
 end
