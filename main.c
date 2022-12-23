@@ -19,7 +19,9 @@ int main() //Código em C
     char regispilha[3][5] = {{"\%edi"}, {"\%esi"}, {"\%edx"}}; //4 Bytes
     char regispilha2[3][5] = {{"\%rdi"}, {"\%rsi"}, {"\%rdx"}}; //8 Bytes
     // FOI UTILIZADO VETORES DE CHAR PARA ARMAZENAR OS REGISTRADORES PARA QUE FICASSE MAIS FACIL A SUA MANIPULAÇÃO
-
+  printf(".section .rodata\n");
+    printf(".data\n");
+    printf(".text\n\n");
     while (1)
     {
         memset(str, 0, sizeof(str));
@@ -40,6 +42,8 @@ int main() //Código em C
 
             // printf("Funcao\n");
             printf("%s:\n", s2);
+             printf("pushq %s\n", regisamare[7]);
+            printf("movq %s, %s\n", regisamare[8], regisamare[7]);
             if (!strcmp(s3, "pa1"))
             {
                 printf("%s = %rdi\n", "ponteiro");
