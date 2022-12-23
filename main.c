@@ -239,4 +239,8 @@ int main() //Código em C
         }
         printf("\n");
     }
+    
+    //Delarar variáveis na pilha
+    //Implementar o acesso ao Array, Set e Get
+    //Representação de um Vetor
 }
