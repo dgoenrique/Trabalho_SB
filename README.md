@@ -25,6 +25,12 @@ O trabalho se baseia na implementação de um tradutor de uma linguagem simples 
 - O tradutor deve ler um arquivo em BPL da entrada padrão (e.g., usando o *scanf*) e imprimir
 a tradução desse programa em Assembly na saída padrão (e.g., usando o *printf*). Pode-se
 criar um arquivo com a linguagem e utilizar o redirecionamento para testar:
+```
+ $ ./tradutor < prog.blp
+```
+- O tradutor deve imprimir as posições dos elementos na pilha em forma de comentários,
+antes da alocação da pilha. Isso inclui variáveis locais ou qualquer posição de salvamento de
+registradores (como se fosse o desenho da pilha).
 
 
 
