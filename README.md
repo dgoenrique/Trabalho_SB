@@ -1,6 +1,6 @@
-<h1 align="center">Trabalho de Software Básico</h1>
-<p align="center"><img src="ufg.png" alt="Logo UFG" height="170" width="240"></p>
-<p>Este projeto foi desenvolvido por:</p>
+# Trabalho de Software Básico
+![logo](ufg.png)
+## Este projeto foi desenvolvido por:
 <ul>
   <li><i>Marcos Reges Mota</i> (Regittos)</li>
   <li><i>Luca Mascarenhas Plaster</i></li>
