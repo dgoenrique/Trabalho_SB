@@ -1,6 +1,8 @@
 <body bgcolor="black"></body>
 <h1 align="center">Trabalho de Software Básico</h1>
-<img src="ufg.png" alt="Logo UFG" height="200" width="270" align="center">
+<center>
+<img src="ufg.png" alt="Logo UFG" height="200" width="270">
+</center>
 <p>Este projeto foi desenvolvido por:</p>
 <ul>
   <li><i>Marcos Reges Mota</i> (Regittos)</li>
