@@ -8,7 +8,7 @@
   <li><i>Marcos Reges Mota</i> (Regittos)</li>
 </ul>
 
-### Tabela de Conteúdo
+## Tabela de Conteúdo
 
 * [Integrantes](#integrantes)
 * [Tabela de conteúdos](#tabela-de-conteúdos)
