@@ -1,4 +1,5 @@
 <h1 align="center">Trabalho de Software Básico</h1>
+<img src="ufg.png" alt="Logo UFG">
 <p>Este projeto foi desenvolvido por:</p>
 <ul>
   <li><i>Marcos Reges Mota</i> (Regittos)</li>
