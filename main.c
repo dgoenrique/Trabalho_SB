@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-int main()
+int main() //Código em C
 {
     char str[100], s1[20], s2[20], s3[20], s4[20], s5[20], s6[20], s7[20];
     int ax, a1, a2, a3;
