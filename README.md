@@ -1,4 +1,4 @@
-# Trabalho de Software Básico
+<p align="center"> # Trabalho de Software Básico </p>
 <p align="center"><img src="ufg.png" alt="Logo UFG" height="170" width="240"></p>
 
 ## Integrantes:
