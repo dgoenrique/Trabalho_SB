@@ -67,7 +67,7 @@ parâmetros).
 - #### Acessso ao array
 A recuperação de um valor de um array utiliza o comando get, no seguinte formato:
 ```
-get array index índice to destino
+get **array** index índice to destino
 ``` 
 - #### Condicional
 O condicional if possui um único valor de teste que pode ser uma variável, um parâmetro ou
