@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-int main() //Código em C
+int main() // Código em C
 {
     char str[100], s1[20], s2[20], s3[20], s4[20], s5[20], s6[20], s7[20];
     int ax, a1, a2, a3;
@@ -16,10 +16,20 @@ int main() //Código em C
         {"\%r11d"},
         {"\%rbp"},
         {"\%rsp"}};
-    char regispilha[3][5] = {{"\%edi"}, {"\%esi"}, {"\%edx"}}; //4 Bytes
-    char regispilha2[3][5] = {{"\%rdi"}, {"\%rsi"}, {"\%rdx"}}; //8 Bytes
+    char regisamare2[9][5] = {
+        {"\%rax"},
+        {"\%rcx"},
+        {"\%r7"},
+        {"\%r8"},
+        {"\%r9"},
+        {"\%r10"},
+        {"\%r11"},
+        {"\%rbp"},
+        {"\%rsp"}};
+    char regispilha[3][5] = {{"\%edi"}, {"\%esi"}, {"\%edx"}};  // 4 Bytes
+    char regispilha2[3][5] = {{"\%rdi"}, {"\%rsi"}, {"\%rdx"}}; // 8 Bytes
     // FOI UTILIZADO VETORES DE CHAR PARA ARMAZENAR OS REGISTRADORES PARA QUE FICASSE MAIS FACIL A SUA MANIPULAÇÃO
-  printf(".section .rodata\n");
+    printf(".section .rodata\n");
     printf(".data\n");
     printf(".text\n\n");
     while (1)
@@ -42,7 +52,7 @@ int main() //Código em C
 
             // printf("Funcao\n");
             printf("%s:\n", s2);
-             printf("pushq %s\n", regisamare[7]);
+            printf("pushq %s\n", regisamare[7]);
             printf("movq %s, %s\n", regisamare[8], regisamare[7]);
             if (!strcmp(s3, "pa1"))
             {
@@ -89,10 +99,17 @@ int main() //Código em C
                     printf("%s%d: .int 0\n", s2, ax);
                 }
 
-                else if (!strcmp("vet", s1))
+                else if (!strcmp("vet", s1)) //definição de um vetor
                 {
-                    sscanf(str, "%s %2s %d %*c %s %2s %d", s1, s2, &ax, s3, s4, &a1);
-                    printf("Vetor %d de tamanho %d\n", ax, a1);
+                    sscanf(str, "%s %s %s %2s %d", s1, s2, s3, s4, &a1);
+                    printf(".align 4\n");
+                    printf("%s: .int ",s2);
+                    for (ax = 0; ax < a1; ax++)
+                    {
+                        printf("0");
+                        if (ax + 1 != a1)
+                            printf(",");
+                    }
                 }
 
                 else if (!strcmp("enddef", s1))
@@ -202,19 +219,13 @@ int main() //Código em C
             }
             printf("\n");
         }
-        else if (!strcmp("if", s1))
+        else if (!strcmp("if", s1))//Definição do IF
         {
             printf("Definição de if\n");
             sscanf(str, "%s %s %s %s", s1, s2, s3, s4);
-            /*if (strlen(s4) > 2)
-            {
-            }
-            else
-            {*/
+
             printf("cmpl $0, %s\n", s2);
             printf("jne end_if\n");
-            // printf("if %s != 0", s2);
-            //}
         }
         else if (!strcmp("endif", s1))
             printf("end_if:\n");
@@ -222,29 +233,45 @@ int main() //Código em C
 
         else if (!strcmp("set", s1))
         {
+            // regisamare 2,3,4 -> usar os registradores r7, r8, r9 para o acesso dos vetores
+           
             printf("Definição do set das variáveis de um vetor\n");
             sscanf(str, "%s %s %s %s %s %s", s1, s2, s3, s4, s5, s6);
+            printf("movq $%s, %s\n", s2, regisamare2[2]);
             sscanf(s4, "%2s %d", s7, &ax);
-            printf(" %s[%d] = ", s2, ax);
-            sscanf(s6, "%2s %d", s7, &ax);
-            if (!strcmp("ci", s7))
-                printf("%d\n", ax);
-            else
-                printf("%s\n", s6);
+            printf("movq $%d, %s\n", ax, regisamare2[3]);
+            printf("imulq $4, %s\n", regisamare2[3]);
+            printf("addq %s, %s\n", regisamare2[2], regisamare2[3]);
+            sscanf(s6, "%2s %d\n", s7, &ax);
+//atribuição de constante
+            if (!strcmp("ci", s7)) 
+                // printf("%d\n", ax);
+                printf("movq $%d, (%s)\n", ax, regisamare2[3]);
+            else //atribuição através de variável
+            {
+                printf("movl %s, %s\n", s6, regisamare[4]);
+                printf("movl %s, (%s)\n", regisamare[4], regisamare[3]);
+            }
+            // printf("%s\n", s6);
         }
 
         else if (!strcmp("get", s1))
         {
-            printf("Definição do get de um vetor\n");
+            // regisamare 2,3,4  -> usar os registradores r7, r8, r9 para o acesso dos vetores
+            printf("Definição do get das variáveis de um vetor\n"); // aqui
             sscanf(str, "%s %s %s %s %s %s", s1, s2, s3, s4, s5, s6);
-            sscanf(s4, "%2s %d", s7, &ax);
-            printf("%s = %s[%d]\n", s6, s2, ax);
-            sscanf(s6, "%2s %d", s7, &ax);
+            printf("movq $%s, %s\n", s2, regisamare2[2]);
+
+            sscanf(s4, "%2s %d\n", s7, &ax);
+            printf("movq $%d, %s\n", ax, regisamare2[3]);
+            printf("imulq $4, %s\n", regisamare2[3]);
+            printf("addq %s, %s\n", regisamare2[2], regisamare2[3]);//até aqui é o mesmo do bloco de cima
+
+            printf("movl (%s), %s\n", regisamare[3], regisamare[4]);
+            printf("movl %s, %s\n", regisamare[4], s6); // recuperação de uma variável
+            // printf("%s\n", s6);
         }
         printf("\n");
     }
-    
-    //Delarar variáveis na pilha
-    //Implementar o acesso ao Array, Set e Get
-    //Representação de um Vetor
+    // Delarar variáveis na pilha
 }
