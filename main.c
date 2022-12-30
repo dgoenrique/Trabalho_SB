@@ -10,10 +10,12 @@ int main() // Código em C
         {"\%ebx"},
         {"\%ecx"},
         {"\%edx"},
+
         {"\%esi"},
         {"\%edi"},
         {"\%ebp"},
         {"\%esp"},
+
         {"\%r8d"},
         {"\%r9d"},
         {"\%r10d"},
@@ -23,15 +25,18 @@ int main() // Código em C
         {"\%r14d"},
         {"\%r15d"},
     };
+
     char registradores64[16][6] = {
         {"\%rax"},
         {"\%rbx"},
         {"\%rcx"},
         {"\%rdx"},
+
         {"\%rsi"},
         {"\%rdi"},
         {"\%rbp"},
         {"\%rsp"},
+
         {"\%r8"},
         {"\%r9"},
         {"\%r10"},
@@ -41,6 +46,7 @@ int main() // Código em C
         {"\%r14"},
         {"\%r15"},
     };
+
      // FOI UTILIZADO VETORES DE CHAR PARA ARMAZENAR OS REGISTRADORES PARA QUE FICASSE MAIS FACIL A SUA MANIPULAÇÃO
     printf(".section .rodata\n");
     printf(".data\n");
@@ -263,7 +269,7 @@ int main() // Código em C
             else // atribuição através de variável
             {
                 printf("movl %s, %s\n", s6, registradores32[10]);
-                printf("movl %s, (%s)\n", registradores32[10], registradores32[9]);
+                printf("movslq %s, (%s)\n", registradores32[10], registradores64[9]);
             }
             // printf("%s\n", s6);
         }
@@ -280,7 +286,7 @@ int main() // Código em C
             printf("imulq $4, %s\n", registradores64[9]);
             printf("addq %s, %s\n", registradores64[8], registradores64[9]); // até aqui é o mesmo do bloco de cima
 
-            printf("movl (%s), %s\n", registradores32[9], registradores32[10]);
+            printf("movl (%s), %s\n", registradores64[9], registradores32[10]);
             printf("movl %s, %s\n", registradores32[10], s6); // recuperação de uma variável
             // printf("%s\n", s6);
         }
