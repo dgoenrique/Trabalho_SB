@@ -5,30 +5,43 @@ int main() // Código em C
 {
     char str[100], s1[20], s2[20], s3[20], s4[20], s5[20], s6[20], s7[20];
     int ax, a1, a2, a3;
-    char regisverdes[5][6] = {{"\%ebx"}, {"\%r12d"}, {"\%r13d"}, {"\%r14d"}, {"\%r15d"}};
-    char regisamare[9][5] = {
+    char registradores32[16][6] = {
         {"\%eax"},
+        {"\%ebx"},
         {"\%ecx"},
-        {"\%r7d"},
+        {"\%edx"},
+        {"\%esi"},
+        {"\%edi"},
+        {"\%ebp"},
+        {"\%esp"},
         {"\%r8d"},
         {"\%r9d"},
         {"\%r10d"},
         {"\%r11d"},
-        {"\%rbp"},
-        {"\%rsp"}};
-    char regisamare2[9][5] = {
+        {"\%r12d"},
+        {"\%r13d"},
+        {"\%r14d"},
+        {"\%r15d"},
+    };
+    char registradores64[16][6] = {
         {"\%rax"},
+        {"\%rbx"},
         {"\%rcx"},
-        {"\%r7"},
+        {"\%rdx"},
+        {"\%rsi"},
+        {"\%rdi"},
+        {"\%rbp"},
+        {"\%rsp"},
         {"\%r8"},
         {"\%r9"},
         {"\%r10"},
         {"\%r11"},
-        {"\%rbp"},
-        {"\%rsp"}};
-    char regispilha[3][5] = {{"\%edi"}, {"\%esi"}, {"\%edx"}};  // 4 Bytes
-    char regispilha2[3][5] = {{"\%rdi"}, {"\%rsi"}, {"\%rdx"}}; // 8 Bytes
-    // FOI UTILIZADO VETORES DE CHAR PARA ARMAZENAR OS REGISTRADORES PARA QUE FICASSE MAIS FACIL A SUA MANIPULAÇÃO
+        {"\%r12"},
+        {"\%r13"},
+        {"\%r14"},
+        {"\%r15"},
+    };
+     // FOI UTILIZADO VETORES DE CHAR PARA ARMAZENAR OS REGISTRADORES PARA QUE FICASSE MAIS FACIL A SUA MANIPULAÇÃO
     printf(".section .rodata\n");
     printf(".data\n");
     printf(".text\n\n");
@@ -52,8 +65,8 @@ int main() // Código em C
 
             // printf("Funcao\n");
             printf("%s:\n", s2);
-            printf("pushq %s\n", regisamare[7]);
-            printf("movq %s, %s\n", regisamare[8], regisamare[7]);
+            printf("pushq %s\n", registradores64[6]);
+            printf("movq %s, %s\n", registradores64[7], registradores64[6]);
             if (!strcmp(s3, "pa1"))
             {
                 printf("%s = %rdi\n", "ponteiro");
@@ -99,11 +112,11 @@ int main() // Código em C
                     printf("%s%d: .int 0\n", s2, ax);
                 }
 
-                else if (!strcmp("vet", s1)) //definição de um vetor
+                else if (!strcmp("vet", s1)) // definição de um vetor
                 {
                     sscanf(str, "%s %s %s %2s %d", s1, s2, s3, s4, &a1);
                     printf(".align 4\n");
-                    printf("%s: .int ",s2);
+                    printf("%s: .int ", s2);
                     for (ax = 0; ax < a1; ax++)
                     {
                         printf("0");
@@ -124,10 +137,10 @@ int main() // Código em C
             sscanf(s2, "%2s %d", s3, &ax);
 
             if (!strcmp(s3, "vi") || !strcmp(s3, "pi"))
-                printf("movl %s, %s\n", s2, regisamare[0]);
+                printf("movl %s, %s\n", s2, registradores32[0]);
 
             else
-                printf("movl $%d, %s\n", ax, regisamare[0]);
+                printf("movl $%d, %s\n", ax, registradores32[0]);
             printf("\n");
         }
         else if (!strcmp("end", s1)) // AQUI SE LOCALIZA O FIM DA FUNÇÃO
@@ -146,38 +159,38 @@ int main() // Código em C
                 if (strlen(s5) > 2) // VERIFICA SE HÁ PARAMETROS, CASO CONTRÁRIO ELE NÃO IRÁ PASSAR NADA. A STRING POSSUI 0 DE TAMANHO
                 {
                     sscanf(s5, "%2s %d", s2, &ax);
-                    if (!strcmp(s2, "ci"))                           // INDICA SE É CONSTANTE
-                        printf("movl $%d, %s\n", ax, regispilha[0]); // verificar se o parametro é do tipo inteiro ou quad
-                    else if (!strcmp(s2, "va"))                      // INDICA SE É VETOR
-                        printf("movl $%s, %s\n", s5, regispilha2[0]);
+                    if (!strcmp(s2, "ci"))                                // INDICA SE É CONSTANTE
+                        printf("movl $%d, %s\n", ax, registradores32[5]); // verificar se o parametro é do tipo inteiro ou quad
+                    else if (!strcmp(s2, "va"))                           // INDICA SE É VETOR
+                        printf("movl $%s, %s\n", s5, registradores64[5]);
                     else
-                        printf("movl %s, %s\n", s5, regispilha[0]); // PARAMETRO OU VARIÁVEL
+                        printf("movl %s, %s\n", s5, registradores32[5]); // PARAMETRO OU VARIÁVEL
                 }
 
                 if (strlen(s6) > 2)
                 {
                     sscanf(s6, "%2s %d", s2, &ax);
                     if (!strcmp(s2, "ci"))
-                        printf("movl $%d, %s\n", ax, regispilha[1]); // verificar se o parametro é do tipo inteiro ou quad
+                        printf("movl $%d, %s\n", ax, registradores32[4]); // verificar se o parametro é do tipo inteiro ou quad
                     else if (!strcmp(s2, "va"))
-                        printf("movl $%s, %s\n", s6, regispilha2[1]);
+                        printf("movl $%s, %s\n", s6, registradores64[4]);
                     else
-                        printf("movl %s, %s\n", s6, regispilha[1]);
+                        printf("movl %s, %s\n", s6, registradores32[4]);
                 }
 
                 if (strlen(s7) > 2)
                 {
                     sscanf(s7, "%2s %d", s2, &ax);
                     if (!strcmp(s2, "ci"))
-                        printf("movl $%d, %s\n", ax, regispilha[2]); // verificar se o parametro é do tipo inteiro ou quad
+                        printf("movl $%d, %s\n", ax, registradores32[3]); // verificar se o parametro é do tipo inteiro ou quad
                     else if (!strcmp(s2, "va"))
-                        printf("movl $%s, %s\n", s7, regispilha2[2]);
+                        printf("movl $%s, %s\n", s7, registradores64[3]);
                     else
-                        printf("movl %s, %s\n", s7, regispilha[2]);
+                        printf("movl %s, %s\n", s7, registradores32[3]);
                 }
 
                 printf("call %s\n", s4);
-                printf("movl %s, %s\n", regisamare[0], s1); // FINALIZA A FUNÇÃO MOVENDO %EAX PARA A VARIAVEL DEFINIDA
+                printf("movl %s, %s\n", registradores32[0], s1); // FINALIZA A FUNÇÃO MOVENDO %EAX PARA A VARIAVEL DEFINIDA
             }
             else // CASO NÃO SEJA CHAMADA DE FUNÇÃO, AQUI É DESTINADO À EXPRESSÕES
             {
@@ -187,31 +200,31 @@ int main() // Código em C
                 {
                     sscanf(s3, "%2s %d", s7, &ax);
                     if (!strcmp("vi", s7) || !strcmp("pi", s7))
-                        printf("movl %s, %s\n", s3, regisamare[1]);
+                        printf("movl %s, %s\n", s3, registradores32[2]);
                     else
-                        printf("movl $%d, %s\n", ax, regisamare[1]);
+                        printf("movl $%d, %s\n", ax, registradores32[2]);
 
                     sscanf(s5, "%2s %d", s7, &ax);
                     if (!strcmp("vi", s7) || !strcmp("pi", s7))
-                        printf("movl %s, %s\n", s5, regisamare[2]);
+                        printf("movl %s, %s\n", s5, registradores32[10]);
                     else
-                        printf("movl $%d, %s\n", ax, regisamare[2]);
+                        printf("movl $%d, %s\n", ax, registradores32[10]);
 
                     if (s4[0] == '*')
-                        printf("imull %s, %s\n", regisamare[1], regisamare[2]);
+                        printf("imull %s, %s\n", registradores32[2], registradores32[10]);
                     else if (s4[0] == '+')
-                        printf("addl %s, %s\n", regisamare[1], regisamare[2]);
+                        printf("addl %s, %s\n", registradores32[2], registradores32[10]);
                     else if (s4[0] == '-')
-                        printf("subl %s, %s\n", regisamare[1], regisamare[2]);
-                    printf("movl %s, %s\n", regisamare[2], s1);
+                        printf("subl %s, %s\n", registradores32[2], registradores32[10]);
+                    printf("movl %s, %s\n", registradores32[10], s1);
                 }
                 else // EXPRESSÃO SIMPLES
                 {
                     sscanf(s3, "%2s %d", s7, &ax);
                     if (!strcmp("vi", s7) || !strcmp("pi", s7))
                     {
-                        printf("movl %s, %s\n", s3, regisamare[1]);
-                        printf("movl %s, %s\n", regisamare[1], s1);
+                        printf("movl %s, %s\n", s3, registradores32[2]);
+                        printf("movl %s, %s\n", registradores32[2], s1);
                     }
                     else
                         printf("movl $%d, %s\n", ax, s1);
@@ -219,7 +232,7 @@ int main() // Código em C
             }
             printf("\n");
         }
-        else if (!strcmp("if", s1))//Definição do IF
+        else if (!strcmp("if", s1)) // Definição do IF
         {
             printf("Definição de if\n");
             sscanf(str, "%s %s %s %s", s1, s2, s3, s4);
@@ -234,23 +247,23 @@ int main() // Código em C
         else if (!strcmp("set", s1))
         {
             // regisamare 2,3,4 -> usar os registradores r7, r8, r9 para o acesso dos vetores
-           
+
             printf("Definição do set das variáveis de um vetor\n");
             sscanf(str, "%s %s %s %s %s %s", s1, s2, s3, s4, s5, s6);
-            printf("movq $%s, %s\n", s2, regisamare2[2]);
+            printf("movq $%s, %s\n", s2, registradores64[8]);
             sscanf(s4, "%2s %d", s7, &ax);
-            printf("movq $%d, %s\n", ax, regisamare2[3]);
-            printf("imulq $4, %s\n", regisamare2[3]);
-            printf("addq %s, %s\n", regisamare2[2], regisamare2[3]);
+            printf("movq $%d, %s\n", ax, registradores64[9]);
+            printf("imulq $4, %s\n", registradores64[9]);
+            printf("addq %s, %s\n", registradores64[8], registradores64[9]);
             sscanf(s6, "%2s %d\n", s7, &ax);
-//atribuição de constante
-            if (!strcmp("ci", s7)) 
+            // atribuição de constante
+            if (!strcmp("ci", s7))
                 // printf("%d\n", ax);
-                printf("movq $%d, (%s)\n", ax, regisamare2[3]);
-            else //atribuição através de variável
+                printf("movq $%d, (%s)\n", ax, registradores64[9]);
+            else // atribuição através de variável
             {
-                printf("movl %s, %s\n", s6, regisamare[4]);
-                printf("movl %s, (%s)\n", regisamare[4], regisamare[3]);
+                printf("movl %s, %s\n", s6, registradores32[10]);
+                printf("movl %s, (%s)\n", registradores32[10], registradores32[9]);
             }
             // printf("%s\n", s6);
         }
@@ -260,15 +273,15 @@ int main() // Código em C
             // regisamare 2,3,4  -> usar os registradores r7, r8, r9 para o acesso dos vetores
             printf("Definição do get das variáveis de um vetor\n"); // aqui
             sscanf(str, "%s %s %s %s %s %s", s1, s2, s3, s4, s5, s6);
-            printf("movq $%s, %s\n", s2, regisamare2[2]);
+            printf("movq $%s, %s\n", s2, registradores64[8]);
 
             sscanf(s4, "%2s %d\n", s7, &ax);
-            printf("movq $%d, %s\n", ax, regisamare2[3]);
-            printf("imulq $4, %s\n", regisamare2[3]);
-            printf("addq %s, %s\n", regisamare2[2], regisamare2[3]);//até aqui é o mesmo do bloco de cima
+            printf("movq $%d, %s\n", ax, registradores64[9]);
+            printf("imulq $4, %s\n", registradores64[9]);
+            printf("addq %s, %s\n", registradores64[8], registradores64[9]); // até aqui é o mesmo do bloco de cima
 
-            printf("movl (%s), %s\n", regisamare[3], regisamare[4]);
-            printf("movl %s, %s\n", regisamare[4], s6); // recuperação de uma variável
+            printf("movl (%s), %s\n", registradores32[9], registradores32[10]);
+            printf("movl %s, %s\n", registradores32[10], s6); // recuperação de uma variável
             // printf("%s\n", s6);
         }
         printf("\n");
