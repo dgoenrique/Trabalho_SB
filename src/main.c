@@ -43,11 +43,11 @@ int main() // Código em C
     // ACESSAR ARRAYS E CRIAR CONDICIONAIS
 
     else if (!strcmp("set", s1)) {
-      accessArrayGet();
+      accessArraySet();
     }
 
     else if (!strcmp("get", s1)) {
-      accessArraySet();
+      accessArrayGet();
     }
     printf("\n");
   }

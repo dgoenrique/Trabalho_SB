@@ -48,31 +48,29 @@ imull %ecx, %r10d
 movl %r10d, vi2
 
 
-Definição do get das variáveis de um vetor
+Definição do set das variáveis de um vetor
 movq $va2, %r8
 movq $5, %r9
 imulq $4, %r9
 addq %r8, %r9
-movl (%r9), %r10d
-movl %r10d, ci2
+movq $2, (%r9)
 
-
-Definição do get das variáveis de um vetor
+Definição do set das variáveis de um vetor
 movq $pa2, %r8
 movq $0, %r9
+imulq $4, %r9
+addq %r8, %r9
+movl vi1, %r10d
+movslq %r10d, (%r9)
+
+Definição do get das variáveis de um vetor
+movq $va2, %r8
+movq $8, %r9
 imulq $4, %r9
 addq %r8, %r9
 movl (%r9), %r10d
 movl %r10d, vi1
 
-
-Definição do set das variáveis de um vetor
-movq $va2, %r8
-movq $8, %r9
-imulq $4, %r9
-addq %r8, %r9
-movl vi1, %r10d
-movslq %r10d, (%r9)
 
 Definição de if
 cmpl $0, vi1
@@ -87,13 +85,14 @@ Definição de if
 cmpl $0, vi1
 jne end_if
 
-Definição do set das variáveis de um vetor
+Definição do get das variáveis de um vetor
 movq $va2, %r8
 movq $8, %r9
 imulq $4, %r9
 addq %r8, %r9
-movl vi1, %r10d
-movslq %r10d, (%r9)
+movl (%r9), %r10d
+movl %r10d, vi1
+
 
 end_if:
 
