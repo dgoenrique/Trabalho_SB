@@ -23,6 +23,10 @@ O trabalho se baseia na implementação de um tradutor de uma linguagem simples 
 ### Como compilar e rodar
 
 - O tradutor deve ser escrito na linguagem C e será compilado e testado no ambiente Linux 
+- Para compilar o código execute a seguinte linha de comando
+```
+gcc -lm -o tradutor main.c header.h
+```
 - O tradutor deve ler um arquivo em BPL da entrada padrão (e.g., usando o *scanf*) e imprimir
 a tradução desse programa em Assembly na saída padrão (e.g., usando o *printf*). Pode-se
 criar um arquivo com a linguagem e utilizar o redirecionamento para testar:
