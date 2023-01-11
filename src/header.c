@@ -35,14 +35,14 @@ void defLocalVar()
       sscanf(str, "%s %2s %d", s1, s2, &ax);
       sscanf(str, "%s %s", s1, s2);
       cont += 4;
-      pos[ax - 1] = cont;//Salva o endereço da variável
+      pos[ax - 1] = cont;
       printf("# %s: -%d \n", s2, cont, registradores64[6]);
     }
     else if (!strcmp("vet", s1)) // Se for um vetor
     {
-      sscanf(str, "%s %2s %s %2s %d", s1, s2, &ax, s3, s4, &a1);
+      sscanf(str, "%s %2s %d %s %2s %d", s1, s2, &ax, s3, s4, &a1);
       cont += 4 * a1;
-      pos[ax - 1] = cont;//Salva o endereço da variável
+      pos[ax - 1] = cont;
       printf("# %s: -%d \n", s2, cont, registradores64[6]);
     }
     else if (!strcmp("enddef", s1)) // salva os parametros na pilha
@@ -57,12 +57,13 @@ void defLocalVar()
         printf("    subq $%d, %s\n\n", aux, registradores64[7]);
         if (cont % 8)
           cont = cont + 8 - (cont % 8);
-
+        aux = posp;
         while (posp--)
         {
           cont += 8;
-          pos[7 + (3 - posp)] = cont;//Salva o endereço dos parâmetros
-          printf("    movq %s, -%d(%s)\n", registradores64[3 + (posp)], cont, registradores64[6]);
+          pos[7 + (3 - aux)] = cont; // Salva o endereço dos parâmetros
+          printf("    movq %s, -%d(%s)\n", registradores64[3 + (aux)], cont, registradores64[6]);
+          aux--;
         }
       }
       else
@@ -83,22 +84,19 @@ void funcCall()
   // IRÁ PASSAR NADA. A STRING POSSUI 0 DE TAMANHO
   {
     sscanf(s5, "%2s %d", s2, &ax);
-    if (!strcmp(s2, "ci")) // INDICA SE É CONSTANTE
-      printf("    movl $%d, %s\n", ax,
-             registradores32[5]); // verificar se o parametro é do tipo
+    if (!strcmp(s2, "ci"))                                  // INDICA SE É CONSTANTE
+      printf("    movl $%d, %s\n", ax, registradores32[5]); // verificar se o parametro é do tipo
     // inteiro ou quad
     else if (!strcmp(s2, "va")) // INDICA SE É VETOR
       printf("    movl $%s, %s\n", s5, registradores64[5]);
     else
-      printf("    movl %s, %s\n", s5,
-             registradores32[5]); // PARAMETRO OU VARIÁVEL
+      printf("    movl %s, %s\n", s5, registradores32[5]); // PARAMETRO OU VARIÁVEL
   }
   if (strlen(s6) > 2)
   {
     sscanf(s6, "%2s %d", s2, &ax);
     if (!strcmp(s2, "ci"))
-      printf("    movl $%d, %s\n", ax,
-             registradores32[4]); // verificar se o parametro é do tipo
+      printf("    movl $%d, %s\n", ax, registradores32[4]); // verificar se o parametro é do tipo
     // inteiro ou quad
     else if (!strcmp(s2, "va"))
       printf("    movl $%s, %s\n", s6, registradores64[4]);
@@ -109,8 +107,7 @@ void funcCall()
   {
     sscanf(s7, "%2s %d", s2, &ax);
     if (!strcmp(s2, "ci"))
-      printf("    movl $%d, %s\n", ax,
-             registradores32[3]); // verificar se o parametro é do tipo
+      printf("    movl $%d, %s\n", ax, registradores32[3]); // verificar se o parametro é do tipo
     // inteiro ou quad
     else if (!strcmp(s2, "va"))
       printf("    movl $%s, %s\n", s7, registradores64[3]);
@@ -181,13 +178,11 @@ void accessArrayGet()
   sscanf(s4, "%2s %d\n", s7, &ax);
   printf("    movq $%d, %s\n", ax, registradores64[9]);
   printf("    imulq $4, %s\n", registradores64[9]);
-  printf("    addq %s, %s\n", registradores64[8],
-         registradores64[9]); // até aqui é o mesmo do bloco de cima
+  printf("    addq %s, %s\n", registradores64[8], registradores64[9]); // até aqui é o mesmo do bloco de cima
 
   printf("    movl (%s), %s\n", registradores64[9], registradores32[10]);
-  printf("    movl %s, %s\n", registradores32[10],
-         s6); // recuperação de uma variável
-              // printf("%s\n", s6);
+  printf("    movl %s, %s\n", registradores32[10], s6); // recuperação de uma variável
+                                                        // printf("%s\n", s6);
   printf("\n");
 }
 
