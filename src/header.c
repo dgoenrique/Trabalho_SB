@@ -1,7 +1,7 @@
 #include "header.h"
-int qi = 0;// Quantidade de ifs
+int qi = 0;        // Quantidade de ifs
 short int pos[10]; // posição dos elementos em uma pilha do vetor
-char posp = 0;//quantidade de parâmetros de uma função
+char posp = 0;     // quantidade de parâmetros de uma função
 void defFunct()
 {
   sscanf(str, "%s %s %s %s %s", s1, s2, s3, s4, s5);
@@ -10,7 +10,7 @@ void defFunct()
   printf("pushq %s\n", registradores64[6]);
   printf("movq %s, %s\n", registradores64[7], registradores64[6]);
 
-  if (!strcmp(s3, "pa1") || !strcmp(s3, "pi1"))//verifica se há parâmetros
+  if (!strcmp(s3, "pa1") || !strcmp(s3, "pi1")) // verifica se há parâmetros
     posp++;
   if (!strcmp(s4, "pa2") || !strcmp(s4, "pi2"))
     posp++;
@@ -32,15 +32,17 @@ void defLocalVar()
     sscanf(str, "%s", s1);
     if (!strcmp("var", s1))
     { // Se for variável
-       sscanf(str, "%s %2s %d", s1, s2, &ax);
+      sscanf(str, "%s %2s %d", s1, s2, &ax);
       sscanf(str, "%s %s", s1, s2);
       cont += 4;
+      pos[ax - 1] = cont;//Salva o endereço da variável
       printf("# %s: -%d \n", s2, cont, registradores64[6]);
     }
     else if (!strcmp("vet", s1)) // Se for um vetor
     {
-      sscanf(str, "%s %s %s %2s %d", s1, s2, s3, s4, &a1);
+      sscanf(str, "%s %2s %s %2s %d", s1, s2, &ax, s3, s4, &a1);
       cont += 4 * a1;
+      pos[ax - 1] = cont;//Salva o endereço da variável
       printf("# %s: -%d \n", s2, cont, registradores64[6]);
     }
     else if (!strcmp("enddef", s1)) // salva os parametros na pilha
@@ -59,6 +61,7 @@ void defLocalVar()
         while (posp--)
         {
           cont += 8;
+          pos[7 + (3 - posp)] = cont;//Salva o endereço dos parâmetros
           printf("    movq %s, -%d(%s)\n", registradores64[3 + (posp)], cont, registradores64[6]);
         }
       }
