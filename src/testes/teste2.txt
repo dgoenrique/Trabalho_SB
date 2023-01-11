@@ -1,8 +1,8 @@
-function f2 pa1
+function f2 pa1 pi2 pa3
 def
 var vi1
 var vi2
-vet va3 size ci30
+vet va3 size ci31
 enddef
 vi1 = ci1
 vi2 = call f1 vi1 va3
