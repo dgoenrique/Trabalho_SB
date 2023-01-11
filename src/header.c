@@ -145,14 +145,21 @@ void funcExpressoes()
   }
   else // EXPRESSÃO SIMPLES
   {
+
+    sscanf(s1, "%2s %d", s2, &a1);
     sscanf(s3, "%2s %d", s7, &ax);
-    if (!strcmp("vi", s7) || !strcmp("pi", s7))
+    if (!strcmp("vi", s7))
     {
-      printf("    movl %s, %s\n", s3, registradores32[2]);
-      printf("    movl %s, %s\n", registradores32[2], s1);
+      printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[2]);
+      printf("    movl %s, -%d(%s)\n", registradores32[2], pos[a1 - 1], registradores64[6]);
+    }
+    else if (!strcmp("pi", s7))
+    {
+      printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[2]);
+      printf("    movl %s, -%d(%s)\n", registradores32[2], pos[a1 - 1], registradores64[6]);
     }
     else
-      printf("    movl $%d, %s\n", ax, s1);
+      printf("    movl $%d, -%d(%s)\n", ax, pos[a1 - 1], registradores64[6]);
   }
 }
 
