@@ -1,5 +1,8 @@
 #include "header.c"
 
+// TODO
+// * ATRIBUIÇÃO
+
 int main() // Código em C
 {
   printf(".section .rodata\n");
@@ -51,5 +54,4 @@ int main() // Código em C
     }
     printf("\n");
   }
-  // Delarar variáveis na pilha
 }
