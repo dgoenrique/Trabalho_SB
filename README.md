@@ -33,6 +33,15 @@ criar um arquivo com a linguagem e utilizar o redirecionamento para testar:
 ```
  $ ./tradutor < prog.blp
 ```
+- No nosso caso a forma com que o grupo está executando é
+No windows :
+```
+tradutor <testes/prog.blp >testes/out.S
+```
+No Linux :
+```
+./tradutor <testes/prog.blp >testes/out.S
+```
 - O tradutor deve imprimir as posições dos elementos na pilha em forma de comentários,
 antes da alocação da pilha. Isso inclui variáveis locais ou qualquer posição de salvamento de
 registradores (como se fosse o desenho da pilha). Por exemplo
