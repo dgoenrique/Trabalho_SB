@@ -1,7 +1,7 @@
 #include "header.h"
 
 // TODO
-// * ATRIBUIÇÃO
+// * divisão
 
 int qi = 0;        // Quantidade de ifs
 short int pos[10]; // posição dos elementos em uma pilha do vetor
@@ -9,7 +9,6 @@ char posparam = 0; // quantidade de parâmetros de uma função
 void defFunct()
 {
   sscanf(str, "%s %s %s %s %s", s1, s2, s3, s4, s5);
-  printf("    ");
   printf("%s:\n", s2);
   printf("pushq %s\n", registradores64[6]);
   printf("movq %s, %s\n", registradores64[7], registradores64[6]);
@@ -20,16 +19,14 @@ void defFunct()
     posparam++;
   if (!strcmp(s5, "pa3") || !strcmp(s5, "pi3"))
     posparam++;
-
-  printf("\n");
-  printf("Definição da função\n");
+  // printf("Definição da função\n");
 }
 
 void defLocalVar()
 {
   int cont = 0;
   // Colocar na pilha
-  printf("Definição das variáveis\n");
+  // printf("Definição das variáveis\n");
   while (1)
   {
     scanf("%[^\n]%*c", str);
@@ -40,14 +37,14 @@ void defLocalVar()
       sscanf(str, "%s %s", s1, s2);
       cont += 4;
       pos[ax - 1] = cont;
-      printf("   # %s: -%d \n", s2, cont, registradores64[6]);
+      printf("    # %s: -%d \n", s2, cont, registradores64[6]);
     }
     else if (!strcmp("vet", s1)) // Se for um vetor
     {
       sscanf(str, "%s %2s %d %s %2s %d", s1, s2, &ax, s3, s4, &a1);
       cont += 4 * a1;
       pos[ax - 1] = cont;
-      printf("  # %s%d: -%d \n", s2, ax, cont, registradores64[6]);
+      printf("    # %s%d: -%d \n", s2, ax, cont, registradores64[6]);
     }
     else if (!strcmp("enddef", s1)) // salva os parametros na pilha
     {
@@ -66,7 +63,7 @@ void defLocalVar()
         {
           cont += 8;
           pos[7 + (3 - aux)] = cont; // Salva o endereço dos parâmetros
-          printf("    movq %s, -%d(%s)\n", registradores64[2 + (aux)], cont, registradores64[6]);
+          printf("    movq %s, -%d(%s)\n", registradores64[3 + (3 - aux)], cont, registradores64[6]);
           aux--;
         }
       }
@@ -74,7 +71,8 @@ void defLocalVar()
       {
         if (cont % 16)
           cont = cont + 16 - (cont % 16);
-        printf("    subq $%d, %s\n\n", cont, registradores64[7]);
+        if (cont != 0)
+          printf("    subq $%d, %s\n", cont, registradores64[7]);
       }
       break;
     }
@@ -84,43 +82,72 @@ void funcCall()
 {
 
   sscanf(str, "%s %s %s %s %s %s %s", s1, s2, s3, s4, s5, s6, s7);
-  if (strlen(s5) > 2) // VERIFICA SE HÁ PARAMETROS, CASO CONTRÁRIO ELE NÃO
+  if (strlen(s5) > 1) // VERIFICA SE HÁ PARAMETROS, CASO CONTRÁRIO ELE NÃO
   // IRÁ PASSAR NADA. A STRING POSSUI 0 DE TAMANHO
   {
     sscanf(s5, "%2s %d", s2, &ax);
     if (!strcmp(s2, "ci"))                                  // INDICA SE É CONSTANTE
       printf("    movl $%d, %s\n", ax, registradores32[5]); // verificar se o parametro é do tipo
     // inteiro ou quad
-    else if (!strcmp(s2, "va")) // INDICA SE É VETOR
-      printf("    movl $%s, %s\n", s5, registradores64[5]);
-    else
-      printf("    movl %s, %s\n", s5, registradores32[5]); // PARAMETRO OU VARIÁVEL
+    else if (s2[1] == 'a') // va ou pa
+    {
+      if (!strcmp(s2, "va")) // INDICA SE É VETOR
+        printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[5]);
+      else
+        printf("    leaq -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores64[5]); // PARAMETRO OU VARIÁVEL
+    }
+    else if (s2[1] == 'i') // va ou pa
+    {
+      if (!strcmp(s2, "vi")) // INDICA SE É VETOR
+        printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[5]);
+      else
+        printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[5]); // PARAMETRO OU VARIÁVEL
+    }
   }
-  if (strlen(s6) > 2)
+  if (strlen(s6) > 1)
   {
     sscanf(s6, "%2s %d", s2, &ax);
     if (!strcmp(s2, "ci"))
       printf("    movl $%d, %s\n", ax, registradores32[4]); // verificar se o parametro é do tipo
-    // inteiro ou quad
-    else if (!strcmp(s2, "va"))
-      printf("    movl $%s, %s\n", s6, registradores64[4]);
-    else
-      printf("    movl %s, %s\n", s6, registradores32[4]);
+                                                            // inteiro ou quad
+    else if (s2[1] == 'a')                                  // va ou pa
+    {
+      if (!strcmp(s2, "va")) // INDICA SE É VETOR
+        printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[4]);
+      else
+        printf("    leaq -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores64[4]); // PARAMETRO OU VARIÁVEL
+    }
+    else if (s2[1] == 'i') // va ou pa
+    {
+      if (!strcmp(s2, "vi")) // INDICA SE É VETOR
+        printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[4]);
+      else
+        printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[4]); // PARAMETRO OU VARIÁVEL
+    }
   }
-  if (strlen(s7) > 2)
+  if (strlen(s7) > 1)
   {
     sscanf(s7, "%2s %d", s2, &ax);
     if (!strcmp(s2, "ci"))
       printf("    movl $%d, %s\n", ax, registradores32[3]); // verificar se o parametro é do tipo
-    // inteiro ou quad
-    else if (!strcmp(s2, "va"))
-      printf("    movl $%s, %s\n", s7, registradores64[3]);
-    else
-      printf("    movl %s, %s\n", s7, registradores32[3]);
+    else if (s2[1] == 'a')                                  // va ou pa
+    {
+      if (!strcmp(s2, "va")) // INDICA SE É VETOR
+        printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[3]);
+      else
+        printf("    leaq -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores64[3]); // PARAMETRO OU VARIÁVEL
+    }
+    else if (s2[1] == 'i') // va ou pa
+    {
+      if (!strcmp(s2, "vi")) // INDICA SE É VETOR
+        printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[3]);
+      else
+        printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[3]); // PARAMETRO OU VARIÁVEL
+    }
   }
   printf("    call %s\n", s4);
-  printf("    movl %s, %s\n", registradores32[0],
-         s1); // FINALIZA A FUNÇÃO MOVENDO %EAX PARA A VARIAVEL DEFINIDA
+  sscanf(s1, "%2s %d", s2, &ax);
+  printf("    movl %s, -%d(%s)\n", registradores32[0], pos[ax - 1], registradores64[6]); // FINALIZA A FUNÇÃO MOVENDO %EAX PARA A VARIAVEL DEFINIDA
 }
 
 void funcExpressoes()
@@ -130,22 +157,38 @@ void funcExpressoes()
   if (strlen(s5) > 2) // EXPRESSÃO COMPLEXA
   {
     sscanf(s3, "%2s %d", s7, &ax);
-    if (!strcmp("vi", s7) || !strcmp("pi", s7))
-      printf("    movl %s, %s\n", s3, registradores32[2]);
+    if (!strcmp("vi", s7))
+      printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[8]);
+    else if (!strcmp("pi", s7))
+      printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[8]);
     else
-      printf("    movl $%d, %s\n", ax, registradores32[2]);
+      printf("    movl $%d, %s\n", ax, registradores32[8]);
+
     sscanf(s5, "%2s %d", s7, &ax);
-    if (!strcmp("vi", s7) || !strcmp("pi", s7))
-      printf("    movl %s, %s\n", s5, registradores32[10]);
+    if (!strcmp("vi", s7))
+      printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[9]);
+    else if (!strcmp("pi", s7))
+      printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[9]);
     else
-      printf("    movl $%d, %s\n", ax, registradores32[10]);
+      printf("    movl $%d, %s\n", ax, registradores32[9]);
+
     if (s4[0] == '*')
-      printf("    imull %s, %s\n", registradores32[2], registradores32[10]);
+      printf("    imull %s, %s\n", registradores32[8], registradores32[9]);
     else if (s4[0] == '+')
-      printf("    addl %s, %s\n", registradores32[2], registradores32[10]);
+      printf("    addl %s, %s\n", registradores32[8], registradores32[9]);
     else if (s4[0] == '-')
-      printf("    subl %s, %s\n", registradores32[2], registradores32[10]);
-    printf("    movl %s, %s\n", registradores32[10], s1);
+      printf("    subl %s, %s\n", registradores32[8], registradores32[9]);
+    else if (s4[0] == '/')
+    {
+      // Com base no gabarito do exercício 1 do laboratório de mecanismos de controle
+      printf("    movl %s, %s\n", registradores32[8], registradores32[0]);
+      printf("    cltd \n");
+      printf("    movl %s, %s\n", registradores32[9], registradores32[2]);
+      printf("    idivl %s \n", registradores32[2]);
+      printf("    movl %s, %s \n", registradores32[0], registradores32[9]);
+    }
+    sscanf(s1, "%2s %d", s7, &ax);
+    printf("    movl %s, -%d(%s)\n", registradores32[9], pos[ax - 1], registradores64[6]);
   }
   else // EXPRESSÃO SIMPLES
   {
@@ -170,26 +213,26 @@ void atribuicao()
 {
   sscanf(str, "%s %s %s", s1, s2, s3);
 
-  if (!strcmp("call", s3)) 
+  if (!strcmp("call", s3))
     funcCall();
-  else 
+  else
     funcExpressoes();
   printf("\n");
 }
 
 void accessArrayGet()
 {
-  printf("Definição do get das variáveis de um vetor\n"); // aqui
+  // printf("Definição do get das variáveis de um vetor\n"); // aqui
   sscanf(str, "%s %2s %d %s %2s %d %s %2s %d", s1, s2, &ax, s3, s4, &a1, s5, s6, &a2);
 
-  printf("    movq $%d, %s\n", a1, registradores64[8]);
+  printf("    movabs $%d, %s\n", a1, registradores64[8]);
 
   printf("    imulq $4, %s\n", registradores64[8]);
 
   if (!strcmp(s2, "va"))
     printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[9]);
   else
-    printf("    leaq -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores64[9]);
+    printf("    movq -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores64[9]);
 
   printf("    addq %s, %s\n", registradores64[9], registradores64[8]);
 
@@ -202,17 +245,17 @@ void accessArrayGet()
 
 void accessArraySet()
 {
-  printf("Definição do set das variáveis de um vetor\n");
+  // printf("Definição do set das variáveis de um vetor\n");
   sscanf(str, "%s %2s %d %s %2s %d %s %2s %d", s1, s2, &ax, s3, s4, &a1, s5, s6, &a2);
 
-  printf("    movq $%d, %s\n", a1, registradores64[8]);
+  printf("    movabs $%d, %s\n", a1, registradores64[8]);
 
   printf("    imulq $4, %s\n", registradores64[8]);
 
   if (!strcmp(s2, "va"))
     printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[9]);
   else
-    printf("    leaq -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores64[9]);
+    printf("    movq -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores64[9]);
 
   printf("    addq %s, %s\n", registradores64[9], registradores64[8]);
   if (!strcmp("ci", s6))
@@ -228,11 +271,15 @@ void accessArraySet()
 
 void condicionalIf()
 {
-  printf("Definição de if\n");
+  // printf("Definição de if\n");
   sscanf(str, "%s %s %s %s", s1, s2, s3, s4);
   qi++;
-  printf("    cmpl $0, %s\n", s2);
-  printf("    jne end_if%d\n", qi);
+  sscanf(s2, "%2s %d", s1, &ax);
+  if (!strcmp("vi", s1))
+    printf("    cmpl $0, -%d(%s)\n", pos[ax - 1], registradores64[6]);
+  else if (!strcmp("pi", s1))
+    printf("    cmpl $0, -%d(%s)\n", pos[7 + (3 - ax)], registradores64[6]);
+  printf("    je end_if%d\n", qi);
 }
 
 void condicionalEndif()
@@ -241,22 +288,27 @@ void condicionalEndif()
   if (!strcmp("endif", s1))
     printf("end_if%d:\n", qi);
 }
-
+void leave()
+{
+  printf("leave\nret\n\n");
+}
 void retorno()
 {
-  printf("Definição do retorno\n");
+  // printf("Definição do retorno\n");
   sscanf(str, "%s %s", s1, s2);
   sscanf(s2, "%2s %d", s3, &ax);
 
-  if (!strcmp(s3, "vi") || !strcmp(s3, "pi"))
-    printf("    movl %s, %s\n", s2, registradores32[0]);
-
+  if (!strcmp(s3, "vi"))
+    printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[0]);
+  else if (!strcmp(s3, "pi"))
+    printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[0]);
+  else if (!strcmp(s3, "va"))
+    printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[0]);
+  else if (!strcmp(s3, "pa"))
+    printf("    leaq -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores64[0]);
   else
     printf("    movl $%d, %s\n", ax, registradores32[0]);
+
   printf("\n");
-}
-void leave()
-{
-  memset(pos, 0, sizeof(pos));
-  printf("leave\nret\n\n");
+  leave();
 }
