@@ -10,25 +10,43 @@
  DESENVOLVEDORES:
  ----------------
   Nome: Diego Enrique da Silva Lima
-  E-mail: diegoenrique@discente.ufg.br
   
   Nome: Luca Mascarenhas Plaster
-  E-mail: 
   
   Nome: Marcos Reges Mota
-  E-mail: 
 
 -----------------------------------------------------------------
  REPOSITÓRIO DO PROJETO: https://github.com/dgoenrique/Trabalho_SB.git
 -----------------------------------------------------------------
- DATA DA ÚLTIMA ALTERAÇÃO: 23 / 01 / 2023
+ DATA DA ÚLTIMA ALTERAÇÃO: 24 / 01 / 2023
 ----------------------------------------------------------------*/
 
 #include "header.h"
 
+// Variáveis globais auxiliares para armazenar as strings
+char str[100], s1[20], s2[20], s3[20], s4[20], s5[20], s6[20], s7[20];
+// Variáveis globais para armazenar os valores decimais
+int ax, a1, a2, a3;
+
+// Matriz com o nome dos registradores de 32 bits.
+char registradores32[16][6] = {
+    {"\%eax"},  {"\%ebx"},  {"\%ecx"},  {"\%edx"},  {"\%esi"},  {"\%edi"},
+    {"\%ebp"},  {"\%esp"},  {"\%r8d"},  {"\%r9d"},  {"\%r10d"}, {"\%r11d"},
+    {"\%r12d"}, {"\%r13d"}, {"\%r14d"}, {"\%r15d"},
+};
+
+// Matriz com o nome dos registradores de 64 bits.
+char registradores64[16][6] = {
+    {"\%rax"}, {"\%rbx"}, {"\%rcx"}, {"\%rdx"}, {"\%rsi"}, {"\%rdi"},
+    {"\%rbp"}, {"\%rsp"}, {"\%r8"},  {"\%r9"},  {"\%r10"}, {"\%r11"},
+    {"\%r12"}, {"\%r13"}, {"\%r14"}, {"\%r15"},
+};
+
+
 int qi = 0;        // Quantidade de ifs
-short int pos[10]; // posição dos elementos em uma pilha do vetor
-char posparam = 0; // quantidade de parâmetros de uma função
+short int pos[10]; // Posição dos elementos em uma pilha do vetor
+char posparam = 0; // Quantidade de parâmetros de uma função
+
 void defFunct()
 {
   sscanf(str, "%s %s %s %s %s", s1, s2, s3, s4, s5);
@@ -36,7 +54,7 @@ void defFunct()
   printf("pushq %s\n", registradores64[6]);
   printf("movq %s, %s\n", registradores64[7], registradores64[6]);
 
-  if (!strcmp(s3, "pa1") || !strcmp(s3, "pi1")) // verifica se há parâmetros
+  if (!strcmp(s3, "pa1") || !strcmp(s3, "pi1")) 
     posparam++;
   if (!strcmp(s4, "pa2") || !strcmp(s4, "pi2"))
     posparam++;
@@ -51,22 +69,22 @@ void defLocalVar()
   {
     scanf("%[^\n]%*c", str);
     sscanf(str, "%s", s1);
-    if (!strcmp("var", s1))
-    { // Se for variável
+    if (!strcmp("var", s1)) // Se for variável
+    { 
       sscanf(str, "%s %2s %d", s1, s2, &ax);
       sscanf(str, "%s %s", s1, s2);
       cont += 4;
       pos[ax - 1] = cont;
-      printf("    # %s: -%d \n", s2, cont, registradores64[6]);
+      printf("    # %s: -%d \n", s2, cont);
     }
     else if (!strcmp("vet", s1)) // Se for um vetor
     {
       sscanf(str, "%s %2s %d %s %2s %d", s1, s2, &ax, s3, s4, &a1);
       cont += 4 * a1;
       pos[ax - 1] = cont;
-      printf("    # %s%d: -%d \n", s2, ax, cont, registradores64[6]);
+      printf("    # %s%d: -%d \n", s2, ax, cont);
     }
-    else if (!strcmp("enddef", s1)) // salva os parametros na pilha
+    else if (!strcmp("enddef", s1)) // Salva os parametros na pilha
     {
       if (posparam != 0)
       {
@@ -102,78 +120,75 @@ void defLocalVar()
 void funcCall()
 {
   sscanf(str, "%s %s %s %s %s %s %s", s1, s2, s3, s4, s5, s6, s7);
-  if (strlen(s5) > 1) // VERIFICA SE HÁ PARAMETROS, CASO CONTRÁRIO ELE NÃO
-  // IRÁ PASSAR NADA. A STRING POSSUI 0 DE TAMANHO
+  if (strlen(s5) > 1) 
   {
     sscanf(s5, "%2s %d", s2, &ax);
-    if (!strcmp(s2, "ci"))                                  // INDICA SE É CONSTANTE
-      printf("    movl $%d, %s\n", ax, registradores32[5]); // verificar se o parametro é do tipo
-    // inteiro ou quad
-    else if (s2[1] == 'a') // va ou pa
+    if (!strcmp(s2, "ci")) // Para constantes inteiras
+      printf("    movl $%d, %s\n", ax, registradores32[5]); 
+    else if (s2[1] == 'a') // Para va (variáveis arrays) ou pa (parâmetros arrays)
     {
-      if (!strcmp(s2, "va")) // INDICA SE É VETOR
+      if (!strcmp(s2, "va")) // Variável array
         printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[5]);
       else
-        printf("    leaq -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores64[5]); // PARAMETRO OU VARIÁVEL
+        printf("    leaq -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores64[5]); // Parâmetro array
     }
-    else if (s2[1] == 'i') // va ou pa
-    {
-      if (!strcmp(s2, "vi")) // INDICA SE É VETOR
+    else if (s2[1] == 'i') // Para vi (variável inteira) ou pi (parâmetro inteiro)
+     {
+      if (!strcmp(s2, "vi")) // Variável inteira
         printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[5]);
       else
-        printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[5]); // PARAMETRO OU VARIÁVEL
+        printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[5]); // Parâmetro inteiro
     }
   }
   if (strlen(s6) > 1)
   {
     sscanf(s6, "%2s %d", s2, &ax);
-    if (!strcmp(s2, "ci"))
-      printf("    movl $%d, %s\n", ax, registradores32[4]); // verificar se o parametro é do tipo
-                                                            // inteiro ou quad
-    else if (s2[1] == 'a')                                  // va ou pa
+    if (!strcmp(s2, "ci")) // Para constantes inteiras
+      printf("    movl $%d, %s\n", ax, registradores32[4]); 
+    else if (s2[1] == 'a')  // Para va (variáveis arrays) ou pa (parâmetros arrays)
     {
-      if (!strcmp(s2, "va")) // INDICA SE É VETOR
+      if (!strcmp(s2, "va")) // Variável array
         printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[4]);
       else
-        printf("    leaq -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores64[4]); // PARAMETRO OU VARIÁVEL
+        printf("    leaq -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores64[4]); // Parâmetro array
     }
-    else if (s2[1] == 'i') // va ou pa
+    else if (s2[1] == 'i') // Para vi (variável inteira) ou pi (parâmetro inteiro)
     {
-      if (!strcmp(s2, "vi")) // INDICA SE É VETOR
+      if (!strcmp(s2, "vi")) // Variável inteira
         printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[4]);
       else
-        printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[4]); // PARAMETRO OU VARIÁVEL
+        printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[4]); // Parâmetro inteiro
     }
   }
   if (strlen(s7) > 1)
   {
     sscanf(s7, "%2s %d", s2, &ax);
-    if (!strcmp(s2, "ci"))
-      printf("    movl $%d, %s\n", ax, registradores32[3]); // verificar se o parametro é do tipo
-    else if (s2[1] == 'a')                                  // va ou pa
+    if (!strcmp(s2, "ci")) // Para constantes inteiras 
+      printf("    movl $%d, %s\n", ax, registradores32[3]); 
+    else if (s2[1] == 'a') // Para va (variáveis arrays) ou pa (parâmetros arrays)
     {
-      if (!strcmp(s2, "va")) // INDICA SE É VETOR
+      if (!strcmp(s2, "va")) // Variável array
         printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[3]);
       else
-        printf("    leaq -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores64[3]); // PARAMETRO OU VARIÁVEL
+        printf("    leaq -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores64[3]); // Parâmetro array
     }
-    else if (s2[1] == 'i') // va ou pa
+    else if (s2[1] == 'i') // Para vi (variáveis inteiras) e pi (parâmetros inteiros)
     {
-      if (!strcmp(s2, "vi")) // INDICA SE É VETOR
+      if (!strcmp(s2, "vi")) // Variáveis inteiras
         printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[3]);
       else
-        printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[3]); // PARAMETRO OU VARIÁVEL
+        printf("    movl -%d(%s), %s\n", pos[7 + (3 - ax)], registradores64[6], registradores32[3]); // Parâmetro inteiro
     }
   }
-  printf("    call %s\n", s4);
+  printf("    call %s\n", s4); // Chamada da função
   sscanf(s1, "%2s %d", s2, &ax);
-  printf("    movl %s, -%d(%s)\n", registradores32[0], pos[ax - 1], registradores64[6]); // FINALIZA A FUNÇÃO MOVENDO %EAX PARA A VARIAVEL DEFINIDA
+  printf("    movl %s, -%d(%s)\n", registradores32[0], pos[ax - 1], registradores64[6]); // %eax para pilha
 }
 
 void funcExpressoes()
 {
   sscanf(str, "%s %s %s %s %s", s1, s2, s3, s4, s5);
-  if (strlen(s5) > 2) // EXPRESSÃO COMPLEXA
+  if (strlen(s5) > 2) // Expressões complexas
   {
     sscanf(s3, "%2s %d", s7, &ax);
     if (!strcmp("vi", s7))
@@ -191,13 +206,13 @@ void funcExpressoes()
     else
       printf("    movl $%d, %s\n", ax, registradores32[9]);
 
-    if (s4[0] == '*')
+    if (s4[0] == '*') // Multiplicação
       printf("    imull %s, %s\n", registradores32[8], registradores32[9]);
-    else if (s4[0] == '+')
+    else if (s4[0] == '+') // Soma
       printf("    addl %s, %s\n", registradores32[8], registradores32[9]);
-    else if (s4[0] == '-')
+    else if (s4[0] == '-') // Subtração
       printf("    subl %s, %s\n", registradores32[8], registradores32[9]);
-    else if (s4[0] == '/')
+    else if (s4[0] == '/') // Divisão
     {
       // Com base no gabarito do exercício 1 do laboratório de mecanismos de controle
       printf("    movl %s, %s\n", registradores32[8], registradores32[0]);
@@ -209,7 +224,7 @@ void funcExpressoes()
     sscanf(s1, "%2s %d", s7, &ax);
     printf("    movl %s, -%d(%s)\n", registradores32[9], pos[ax - 1], registradores64[6]);
   }
-  else // EXPRESSÃO SIMPLES
+  else // Expressões simples
   {
     sscanf(s1, "%2s %d", s2, &a1);
     sscanf(s3, "%2s %d", s7, &ax);
@@ -231,11 +246,11 @@ void funcExpressoes()
 void atribuicao()
 {
   sscanf(str, "%s %s %s", s1, s2, s3);
-
-  if (!strcmp("call", s3))
+    
+  if (!strcmp("call", s3)) // Chamada de função
     funcCall();
   else
-    funcExpressoes();
+    funcExpressoes(); // Expressões aritméticas e atribuições
   printf("\n");
 }
 
