@@ -1,7 +1,30 @@
-#include "header.h"
+/*----------------------------------------------------------------
+  	        	        Trabalho_SB
+                         (header.c)
+ -----------------------------------------------------------------
+ DESCRIÇÃO:
+ ---------
+ Implementação das funções da biblioteca "header.h", que contêm os protótipos das funções
+ e as variaveis globais com os registradores.
 
-// TODO
-// * divisão
+ DESENVOLVEDORES:
+ ----------------
+  Nome: Diego Enrique da Silva Lima
+  E-mail: diegoenrique@discente.ufg.br
+  
+  Nome: Luca Mascarenhas Plaster
+  E-mail: 
+  
+  Nome: Marcos Reges Mota
+  E-mail: 
+
+-----------------------------------------------------------------
+ REPOSITÓRIO DO PROJETO: https://github.com/dgoenrique/Trabalho_SB.git
+-----------------------------------------------------------------
+ DATA DA ÚLTIMA ALTERAÇÃO: 23 / 01 / 2023
+----------------------------------------------------------------*/
+
+#include "header.h"
 
 int qi = 0;        // Quantidade de ifs
 short int pos[10]; // posição dos elementos em uma pilha do vetor
@@ -19,14 +42,11 @@ void defFunct()
     posparam++;
   if (!strcmp(s5, "pa3") || !strcmp(s5, "pi3"))
     posparam++;
-  // printf("Definição da função\n");
 }
 
 void defLocalVar()
 {
   int cont = 0;
-  // Colocar na pilha
-  // printf("Definição das variáveis\n");
   while (1)
   {
     scanf("%[^\n]%*c", str);
@@ -78,9 +98,9 @@ void defLocalVar()
     }
   }
 }
+
 void funcCall()
 {
-
   sscanf(str, "%s %s %s %s %s %s %s", s1, s2, s3, s4, s5, s6, s7);
   if (strlen(s5) > 1) // VERIFICA SE HÁ PARAMETROS, CASO CONTRÁRIO ELE NÃO
   // IRÁ PASSAR NADA. A STRING POSSUI 0 DE TAMANHO
@@ -153,7 +173,6 @@ void funcCall()
 void funcExpressoes()
 {
   sscanf(str, "%s %s %s %s %s", s1, s2, s3, s4, s5);
-  // S4 É A OPERAÇÃO
   if (strlen(s5) > 2) // EXPRESSÃO COMPLEXA
   {
     sscanf(s3, "%2s %d", s7, &ax);
@@ -222,7 +241,6 @@ void atribuicao()
 
 void accessArrayGet()
 {
-  // printf("Definição do get das variáveis de um vetor\n"); // aqui
   sscanf(str, "%s %2s %d %s %2s %d %s %2s %d", s1, s2, &ax, s3, s4, &a1, s5, s6, &a2);
 
   printf("    movabs $%d, %s\n", a1, registradores64[8]);
@@ -245,7 +263,6 @@ void accessArrayGet()
 
 void accessArraySet()
 {
-  // printf("Definição do set das variáveis de um vetor\n");
   sscanf(str, "%s %2s %d %s %2s %d %s %2s %d", s1, s2, &ax, s3, s4, &a1, s5, s6, &a2);
 
   printf("    movabs $%d, %s\n", a1, registradores64[8]);
@@ -271,7 +288,6 @@ void accessArraySet()
 
 void condicionalIf()
 {
-  // printf("Definição de if\n");
   sscanf(str, "%s %s %s %s", s1, s2, s3, s4);
   qi++;
   sscanf(s2, "%2s %d", s1, &ax);
@@ -288,13 +304,14 @@ void condicionalEndif()
   if (!strcmp("endif", s1))
     printf("end_if%d:\n", qi);
 }
+
 void leave()
 {
   printf("leave\nret\n\n");
 }
+
 void retorno()
 {
-  // printf("Definição do retorno\n");
   sscanf(str, "%s %s", s1, s2);
   sscanf(s2, "%2s %d", s3, &ax);
 

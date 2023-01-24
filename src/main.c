@@ -1,7 +1,30 @@
-#include "header.c"
+/*----------------------------------------------------------------
+                        Trabalho_SB
+                         (main.c)
+ -----------------------------------------------------------------
+ DESCRIÇÃO:
+ ---------
+ O trabalho se baseia na implementação de um tradutor de uma 
+ linguagem simples (chamada de BPL – Bruno’s Programming Language) para Assembly.
 
-// TODO
-// * divisão
+ DESENVOLVEDORES:
+ ----------------
+  Nome: Diego Enrique da Silva Lima
+  E-mail: diegoenrique@discente.ufg.br
+
+  Nome: Luca Mascarenhas Plaster
+  E-mail: 
+
+  Nome: Marcos Reges Mota
+  E-mail: 
+
+-----------------------------------------------------------------
+ REPOSITÓRIO DO PROJETO: https://github.com/dgoenrique/Trabalho_SB.git
+-----------------------------------------------------------------
+ DATA DA ÚLTIMA ALTERAÇÃO: 23 / 01 / 2023
+----------------------------------------------------------------*/
+
+#include "header.c"
 
 int main() // Código em C
 {
@@ -25,8 +48,6 @@ int main() // Código em C
     if (!strlen(str))
       scanf("%*c");
 
-    // printf("%s\n", sr);
-    //  sscanf(str, "%s %s %s %s %s %s", s1, s2, s3, s4, s5, s6);
     sscanf(str, "%s", s1);
     //
     if (!strcmp("function", s1))
@@ -54,13 +75,10 @@ int main() // Código em C
     }
     else if (!strcmp("endif", s1))
       condicionalEndif();
-    // ACESSAR ARRAYS E CRIAR CONDICIONAIS
-
     else if (!strcmp("set", s1))
     {
       accessArraySet();
     }
-
     else if (!strcmp("get", s1))
     {
       accessArrayGet();

@@ -1,20 +1,25 @@
 <h1 align="center"> Tabalho de Software Básico </h1>
-<p align="center"><img src="ufg.png" alt="Logo UFG" height="170" width="240"></p>
+<p align="center"><img src="images/ufg.png" alt="Logo UFG" height="170" width="240"></p>
 
-## Integrantes:
-<ul>
-  <li><i>Diego Enrique da Silva Lima</i></li>
-  <li><i>Luca Mascarenhas Plaster</i></li>
-  <li><i>Marcos Reges Mota</i> (Regittos)</li>
-</ul>
 
-## Tabela de Conteúdo
+## Tabela de Conteúdos
 
-* [Integrantes](#integrantes)
 * [Tabela de conteúdos](#tabela-de-conteúdos)
-* [Descrição do Projeto](#descrição-do-Projeto)
-* [Como  compilar e rodar](#como-compilar-e-rodar)
-* [Descrição da Linguagem](#descricao-da-linguagem)
+* [Integrantes](#integrantes)
+* [Descrição do Projeto](#descrição-do-projeto)
+    * [Como  compilar e rodar](#como-compilar-e-rodar)
+* [Descrição da Linguagem](#descrição-da-linguagem)
+    * [Definição da função](#definição-da-função)
+    * [Variáveis Locais](#variáveis-locais)
+    * [Corpo da Função](#corpo-da-função)
+* [BNF da Linguagem](#bnf-da-linguagem)
+
+
+## Integrantes
+
+ - [*Diego Enrique da Silva Lima*](https://github.com/dgoenrique)
+ - [*Luca Mascarenhas Plaster*](https://github.com/LucaPlaster)
+ - [*Marcos Reges Mota*(Regittos)](https://github.com/Regittos)
 
 ## Descrição do Projeto
 
@@ -31,10 +36,10 @@ gcc -lm -o tradutor main.c header.h
 a tradução desse programa em Assembly na saída padrão (e.g., usando o *printf*). Pode-se
 criar um arquivo com a linguagem e utilizar o redirecionamento para testar:
 ```
- $ ./tradutor < prog.blp
+./tradutor < prog.blp
 ```
-- No nosso caso a forma com que o grupo está executando é
-No windows :
+* No nosso caso a forma com que o grupo está executando
+no windows :
 ```
 tradutor <testes/prog.blp >testes/out.S
 ```
@@ -42,7 +47,9 @@ No Linux :
 ```
 ./tradutor <testes/prog.blp >testes/out.S
 ```
-- O tradutor deve imprimir as posições dos elementos na pilha em forma de comentários,
+---
+
+**Observação:** O tradutor deve imprimir as posições dos elementos na pilha em forma de comentários,
 antes da alocação da pilha. Isso inclui variáveis locais ou qualquer posição de salvamento de
 registradores (como se fosse o desenho da pilha). Por exemplo
 ```
@@ -52,7 +59,7 @@ registradores (como se fosse o desenho da pilha). Por exemplo
 # rbx: -36
 subq $48, %rsp
 ```
-
+---
 ## Descrição da Linguagem
 
 A linguagem é baseada na definição de funções (uma ou várias). As funções sempre retornam
@@ -62,30 +69,37 @@ algum valor.
 A definição de função inicia com a palavra-chave function, seguido pelo nome da função e
 depois de zero a três parâmetros. O nome da função segue o padrão fN, onde N é um índice único
 começando de 1 (1, 2, 3, etc.).
+
 ### Variáveis locais
 Uma função pode ter até cinco variáveis locais, as quais podem ser variáveis inteiras (int) ou
 arrays de inteiros (int[]). Tanto as variáveis inteiras ou os arrays inteiros devem ser alocados na
 pilha e não possuem valor inicial (têm “lixo” de memória).
+
 ### Corpo da função
 O corpo da função é um conjunto de comandos que inicia depois da definição das variáveis.
 Um comando pode ser (i) atribuição de variável inteira, (ii) alteração de uma posição do array, (iii)
 recuperação de valor de uma posição de um array, (iv) condicional if ou (v) returno de um valor.
+
 - #### Atribuição
 Uma atribuição de variável inteira pode ser uma atribuição simples, uma expressão ou o
 retorno de uma chamada de função.
+
 - #### Chamada da função
 As chamadas de função são feitas utilizando a palavra-chave call seguida do nome da
 função. Depois do nome da função são passados os parâmetros para função a ser chamada (até três
 parâmetros).
+
 - #### Acessso ao array
 A recuperação de um valor de um array utiliza o comando get, no seguinte formato:
 ```
 get **array** index índice to destino
 ``` 
+
 - #### Condicional
 O condicional if possui um único valor de teste que pode ser uma variável, um parâmetro ou
 uma constante. Ela segue a mesma lógica de C, onde zero (0) é falso e qualquer valor não zero
 (positivo ou negativo) é verdadeiro. O corpo do condicional possui apenas um único comando.
+
 ## BNF da Linguagem
 ```
 <prog> → <func>

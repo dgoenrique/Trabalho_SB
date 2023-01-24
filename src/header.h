@@ -1,3 +1,30 @@
+
+/*----------------------------------------------------------------
+                        Trabalho_SB
+                         (header.c)
+ -----------------------------------------------------------------
+ DESCRIÇÃO:
+ ---------
+ Bliblioteca que possui os protótipos das funções principais do programa
+ e as variáveis para os registradores.
+
+ DESENVOLVEDORES:
+ ----------------
+  Nome: Diego Enrique da Silva Lima
+  E-mail: diegoenrique@discente.ufg.br
+
+  Nome: Luca Mascarenhas Plaster
+  E-mail: 
+
+  Nome: Marcos Reges Mota
+  E-mail: 
+
+-----------------------------------------------------------------
+ REPOSITÓRIO DO PROJETO: https://github.com/dgoenrique/Trabalho_SB.git
+-----------------------------------------------------------------
+ DATA DA ÚLTIMA ALTERAÇÃO: 23 / 01 / 2023
+----------------------------------------------------------------*/
+
 #ifndef __HEADER__
 #define __HEADER__
 
