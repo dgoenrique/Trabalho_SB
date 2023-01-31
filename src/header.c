@@ -338,7 +338,7 @@ void retorno()
   else if (!strcmp(s3, "va"))
     printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[0]);
   else if (!strcmp(s3, "pa"))
-    printf("    leaq -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores64[0]);
+    printf("    movq -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores64[0]);
   else
     printf("    movl $%d, %s\n", ax, registradores32[0]);
 
