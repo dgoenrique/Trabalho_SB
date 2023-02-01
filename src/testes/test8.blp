@@ -1,0 +1,36 @@
+function f1 
+def 
+var vi1 
+vet va2 size ci3
+enddef 
+vi1 = call f2 va2
+return vi1 
+end
+
+function f2 pa1
+def 
+var vi1
+enddef
+set pa1 index ci0 with ci3
+set pa1 index ci1 with ci2
+set pa1 index ci2 with ci1
+vi1 = call f3 pa1 
+return vi1 
+end 
+
+function f3 pa1 
+def 
+var vi1 
+var vi2
+enddef 
+vi1 = ci0
+get pa1 index ci0 to vi2
+vi1 = vi1 + vi2 
+get pa1 index ci1 to vi2 
+vi1 = vi1 + vi2 
+get pa1 index ci2 to vi2
+vi1 = vi1 + vi2 
+return vi1 
+end 
+
+
