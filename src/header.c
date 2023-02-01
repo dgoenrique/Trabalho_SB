@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------
-  	        	        Trabalho_SB
+                      Trabalho_SB
                          (header.c)
  -----------------------------------------------------------------
  DESCRIÇÃO:
@@ -10,9 +10,9 @@
  DESENVOLVEDORES:
  ----------------
   Nome: Diego Enrique da Silva Lima
-  
+
   Nome: Luca Mascarenhas Plaster
-  
+
   Nome: Marcos Reges Mota
 
 -----------------------------------------------------------------
@@ -30,18 +30,43 @@ int ax, a1, a2, a3;
 
 // Matriz com o nome dos registradores de 32 bits.
 char registradores32[16][6] = {
-    {"\%eax"},  {"\%ebx"},  {"\%ecx"},  {"\%edx"},  {"\%esi"},  {"\%edi"},
-    {"\%ebp"},  {"\%esp"},  {"\%r8d"},  {"\%r9d"},  {"\%r10d"}, {"\%r11d"},
-    {"\%r12d"}, {"\%r13d"}, {"\%r14d"}, {"\%r15d"},
+    {"\%eax"},
+    {"\%ebx"},
+    {"\%ecx"},
+    {"\%edx"},
+    {"\%esi"},
+    {"\%edi"},
+    {"\%ebp"},
+    {"\%esp"},
+    {"\%r8d"},
+    {"\%r9d"},
+    {"\%r10d"},
+    {"\%r11d"},
+    {"\%r12d"},
+    {"\%r13d"},
+    {"\%r14d"},
+    {"\%r15d"},
 };
 
 // Matriz com o nome dos registradores de 64 bits.
 char registradores64[16][6] = {
-    {"\%rax"}, {"\%rbx"}, {"\%rcx"}, {"\%rdx"}, {"\%rsi"}, {"\%rdi"},
-    {"\%rbp"}, {"\%rsp"}, {"\%r8"},  {"\%r9"},  {"\%r10"}, {"\%r11"},
-    {"\%r12"}, {"\%r13"}, {"\%r14"}, {"\%r15"},
+    {"\%rax"},
+    {"\%rbx"},
+    {"\%rcx"},
+    {"\%rdx"},
+    {"\%rsi"},
+    {"\%rdi"},
+    {"\%rbp"},
+    {"\%rsp"},
+    {"\%r8"},
+    {"\%r9"},
+    {"\%r10"},
+    {"\%r11"},
+    {"\%r12"},
+    {"\%r13"},
+    {"\%r14"},
+    {"\%r15"},
 };
-
 
 int qi = 0;        // Quantidade de ifs
 short int pos[10]; // Posição dos elementos em uma pilha do vetor
@@ -50,12 +75,12 @@ char posparam = 0; // Quantidade de parâmetros de uma função
 void defFunct()
 {
   sscanf(str, "%s %s %s %s %s", s1, s2, s3, s4, s5);
-  printf(".globl %s\n",s2);
+  printf(".globl %s\n", s2);
   printf("%s:\n", s2);
   printf("pushq %s\n", registradores64[6]);
   printf("movq %s, %s\n", registradores64[7], registradores64[6]);
 
-  if (!strcmp(s3, "pa1") || !strcmp(s3, "pi1")) 
+  if (!strcmp(s3, "pa1") || !strcmp(s3, "pi1"))
     posparam++;
   if (!strcmp(s4, "pa2") || !strcmp(s4, "pi2"))
     posparam++;
@@ -71,7 +96,7 @@ void defLocalVar()
     scanf("%[^\n]%*c", str);
     sscanf(str, "%s", s1);
     if (!strcmp("var", s1)) // Se for variável
-    { 
+    {
       sscanf(str, "%s %2s %d", s1, s2, &ax);
       sscanf(str, "%s %s", s1, s2);
       cont += 4;
@@ -121,64 +146,64 @@ void defLocalVar()
 void funcCall()
 {
   sscanf(str, "%s %s %s %s %s %s %s", s1, s2, s3, s4, s5, s6, s7);
-  if (strlen(s5) > 1) 
+  if (strlen(s5) > 1)
   {
     sscanf(s5, "%2s %d", s2, &ax);
     if (!strcmp(s2, "ci")) // Para constantes inteiras
-      printf("    movl $%d, %s\n", ax, registradores32[5]); 
+      printf("    movl $%d, %s\n", ax, registradores32[5]);
     else if (s2[1] == 'a') // Para va (variáveis arrays) ou pa (parâmetros arrays)
     {
       if (!strcmp(s2, "va")) // Variável array
         printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[5]);
       else
-        printf("    movq -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores64[5]); // Parâmetro array
+        printf("    movq -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores64[5]); // Parâmetro array
     }
     else if (s2[1] == 'i') // Para vi (variável inteira) ou pi (parâmetro inteiro)
-     {
+    {
       if (!strcmp(s2, "vi")) // Variável inteira
         printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[5]);
       else
-        printf("    movl -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores32[5]); // Parâmetro inteiro
+        printf("    movl -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores32[5]); // Parâmetro inteiro
     }
   }
   if (strlen(s6) > 1)
   {
     sscanf(s6, "%2s %d", s2, &ax);
     if (!strcmp(s2, "ci")) // Para constantes inteiras
-      printf("    movl $%d, %s\n", ax, registradores32[4]); 
-    else if (s2[1] == 'a')  // Para va (variáveis arrays) ou pa (parâmetros arrays)
+      printf("    movl $%d, %s\n", ax, registradores32[4]);
+    else if (s2[1] == 'a') // Para va (variáveis arrays) ou pa (parâmetros arrays)
     {
       if (!strcmp(s2, "va")) // Variável array
         printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[4]);
       else
-        printf("    leaq -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores64[4]); // Parâmetro array
+        printf("    leaq -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores64[4]); // Parâmetro array
     }
     else if (s2[1] == 'i') // Para vi (variável inteira) ou pi (parâmetro inteiro)
     {
       if (!strcmp(s2, "vi")) // Variável inteira
         printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[4]);
       else
-        printf("    movl -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores32[4]); // Parâmetro inteiro
+        printf("    movl -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores32[4]); // Parâmetro inteiro
     }
   }
   if (strlen(s7) > 1)
   {
     sscanf(s7, "%2s %d", s2, &ax);
-    if (!strcmp(s2, "ci")) // Para constantes inteiras 
-      printf("    movl $%d, %s\n", ax, registradores32[3]); 
+    if (!strcmp(s2, "ci")) // Para constantes inteiras
+      printf("    movl $%d, %s\n", ax, registradores32[3]);
     else if (s2[1] == 'a') // Para va (variáveis arrays) ou pa (parâmetros arrays)
     {
       if (!strcmp(s2, "va")) // Variável array
         printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[3]);
       else
-        printf("    leaq -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores64[3]); // Parâmetro array
+        printf("    leaq -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores64[3]); // Parâmetro array
     }
     else if (s2[1] == 'i') // Para vi (variáveis inteiras) e pi (parâmetros inteiros)
     {
       if (!strcmp(s2, "vi")) // Variáveis inteiras
         printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[3]);
       else
-        printf("    movl -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores32[3]); // Parâmetro inteiro
+        printf("    movl -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores32[3]); // Parâmetro inteiro
     }
   }
   printf("    call %s\n", s4); // Chamada da função
@@ -195,7 +220,7 @@ void funcExpressoes()
     if (!strcmp("vi", s7))
       printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[8]);
     else if (!strcmp("pi", s7))
-      printf("    movl -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores32[8]);
+      printf("    movl -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores32[8]);
     else
       printf("    movl $%d, %s\n", ax, registradores32[8]);
 
@@ -203,7 +228,7 @@ void funcExpressoes()
     if (!strcmp("vi", s7))
       printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[9]);
     else if (!strcmp("pi", s7))
-      printf("    movl -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores32[9]);
+      printf("    movl -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores32[9]);
     else
       printf("    movl $%d, %s\n", ax, registradores32[9]);
 
@@ -219,11 +244,14 @@ void funcExpressoes()
       printf("    movl %s, %s\n", registradores32[8], registradores32[0]);
       printf("    cltd \n");
       printf("    movl %s, %s\n", registradores32[9], registradores32[2]);
-      printf("    idivl %s \n", registradores32[2]);
+      printf("    idivl %s \n", registradores32[2]);  
       printf("    movl %s, %s \n", registradores32[0], registradores32[9]);
     }
     sscanf(s1, "%2s %d", s7, &ax);
-    printf("    movl %s, -%d(%s)\n", registradores32[9], pos[ax - 1], registradores64[6]);
+    if (!strcmp("pi", s7))
+      printf("    movl %s, -%d(%s)\n", registradores32[9], pos[6 + ax], registradores64[6]);
+    else
+      printf("    movl %s, -%d(%s)\n", registradores32[9], pos[ax - 1], registradores64[6]);
   }
   else // Expressões simples
   {
@@ -236,7 +264,7 @@ void funcExpressoes()
     }
     else if (!strcmp("pi", s7))
     {
-      printf("    movl -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores32[2]);
+      printf("    movl -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores32[2]);
       printf("    movl %s, -%d(%s)\n", registradores32[2], pos[a1 - 1], registradores64[6]);
     }
     else
@@ -247,7 +275,7 @@ void funcExpressoes()
 void atribuicao()
 {
   sscanf(str, "%s %s %s", s1, s2, s3);
-    
+
   if (!strcmp("call", s3)) // Chamada de função
     funcCall();
   else
@@ -310,7 +338,7 @@ void condicionalIf()
   if (!strcmp("vi", s1))
     printf("    cmpl $0, -%d(%s)\n", pos[ax - 1], registradores64[6]);
   else if (!strcmp("pi", s1))
-    printf("    cmpl $0, -%d(%s)\n", pos[6+ax], registradores64[6]);
+    printf("    cmpl $0, -%d(%s)\n", pos[6 + ax], registradores64[6]);
   printf("    je end_if%d\n", qi);
 }
 
@@ -334,11 +362,11 @@ void retorno()
   if (!strcmp(s3, "vi"))
     printf("    movl -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores32[0]);
   else if (!strcmp(s3, "pi"))
-    printf("    movl -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores32[0]);
+    printf("    movl -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores32[0]);
   else if (!strcmp(s3, "va"))
     printf("    leaq -%d(%s), %s\n", pos[ax - 1], registradores64[6], registradores64[0]);
   else if (!strcmp(s3, "pa"))
-    printf("    movq -%d(%s), %s\n", pos[6+ax], registradores64[6], registradores64[0]);
+    printf("    movq -%d(%s), %s\n", pos[6 + ax], registradores64[6], registradores64[0]);
   else
     printf("    movl $%d, %s\n", ax, registradores32[0]);
 
